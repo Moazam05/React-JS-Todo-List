@@ -24,24 +24,33 @@ class App extends Component {
       title: this.state.item
     };
     const updatedItem = [...this.state.items, newItem];
-    this.setState(
-      {
-        items: updatedItem,
-        item: "",
-        id: uuid(),
-        editItem: false
-      },
-      () => console.log(this.state)
-    );
+    this.setState({
+      items: updatedItem,
+      item: "",
+      id: uuid(),
+      editItem: false
+    });
   };
   clearList = () => {
-    console.log("Clear List");
+    this.setState({
+      items: []
+    });
   };
-  handlDelete = (id) => {
-    console.log(`Handle Delete ${id}`);
+  handleDelete = (id) => {
+    const filterReadItems = this.state.items.filter((item) => item.id !== id);
+    this.setState({
+      items: filterReadItems
+    });
   };
-  handlEdit = (id) => {
-    console.log(`Handle Edit ${id}`);
+  handleEdit = (id) => {
+    const filterReadItems = this.state.items.filter((item) => item.id !== id);
+    const selectedItem = this.state.items.find((item) => item.id === id);
+    this.setState({
+      items: filterReadItems,
+      item: selectedItem.title,
+      id: id,
+      editItem: true
+    });
   };
   render() {
     return (
@@ -53,13 +62,13 @@ class App extends Component {
               item={this.state.item}
               handleChange={this.handleChange}
               handleSubmit={this.handleSubmit}
-              editItem={this.editItem}
+              editItem={this.state.editItem}
             />
             <TodoList
               items={this.state.items}
               clearList={this.clearList}
-              handlDelete={this.handlDelete}
-              handlEdit={this.handlEdit}
+              handleDelete={this.handleDelete}
+              handleEdit={this.handleEdit}
             />
           </div>
         </div>
